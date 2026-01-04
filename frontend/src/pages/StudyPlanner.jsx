@@ -1,79 +1,74 @@
-import React, { useState, useEffect } from "react";
-import { getSyllabi, generateStudyPlan } from "../services/api";
-import AIChatBot from "../components/AIChatBot";
+import React, { useState } from 'react';
+import axios from 'axios';
 
-const StudyPlanner = () => {
-  const [syllabi, setSyllabi] = useState([]);
-  const [selectedSyllabus, setSelectedSyllabus] = useState("");
-  const [examDate, setExamDate] = useState("");
-  const [hoursPerDay, setHoursPerDay] = useState(2);
-  const [studyPlan, setStudyPlan] = useState(null);
+function StudyPlanner() {
+    const [syllabusId, setSyllabusId] = useState('');
+    const [examDate, setExamDate] = useState('');
+    const [hoursPerDay, setHoursPerDay] = useState(3);
+    const [plan, setPlan] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    async function fetchSyllabi() {
-      const data = await getSyllabi();
-      setSyllabi(data.syllabi);
-    }
-    fetchSyllabi();
-  }, []);
+    const generatePlan = async () => {
+        try {
+            setLoading(true);
+            const res = await axios.post(
+                'http://localhost:5001/api/study-plan',
+                { syllabusId, examDate, hoursPerDay }
+            );
+            setPlan(res.data.studyPlan.plan);
+        } catch (err) {
+            alert('Failed to generate study plan',err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  const handleGeneratePlan = async () => {
-    const data = await generateStudyPlan(
-      selectedSyllabus,
-      examDate,
-      hoursPerDay
+    return (
+        <div className="p-6 max-w-4xl mx-auto">
+            <h1 className="text-2xl font-bold mb-4">Study Planner</h1>
+
+            <input
+                className="border p-2 w-full mb-2"
+                placeholder="Syllabus ID"
+                value={syllabusId}
+                onChange={e => setSyllabusId(e.target.value)}
+            />
+
+            <input
+                type="date"
+                className="border p-2 w-full mb-2"
+                value={examDate}
+                onChange={e => setExamDate(e.target.value)}
+            />
+
+            <input
+                type="number"
+                className="border p-2 w-full mb-4"
+                value={hoursPerDay}
+                onChange={e => setHoursPerDay(e.target.value)}
+            />
+
+            <button
+                onClick={generatePlan}
+                className="bg-indigo-600 text-white px-4 py-2 rounded"
+            >
+                {loading ? 'Generating...' : 'Generate Study Plan'}
+            </button>
+
+            <div className="mt-6">
+                {plan.map((day, i) => (
+                    <div key={i} className="border rounded p-4 mb-3">
+                        <h3 className="font-semibold">{day.day}</h3>
+                        <ul className="list-disc ml-6">
+                            {day.tasks.map((t, j) => (
+                                <li key={j}>{t}</li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
+            </div>
+        </div>
     );
-    setStudyPlan(data.studyPlan);
-  };
-
-  return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Generate Study Plan</h2>
-      <select
-        className="border p-2 w-full mb-2"
-        onChange={(e) => setSelectedSyllabus(e.target.value)}
-      >
-        <option value="">Select Syllabus</option>
-        {syllabi.map((s) => (
-          <option key={s._id} value={s._id}>
-            {s.courseName}
-          </option>
-        ))}
-      </select>
-      <input
-        type="date"
-        className="border p-2 w-full mb-2"
-        value={examDate}
-        onChange={(e) => setExamDate(e.target.value)}
-      />
-      <input
-        type="number"
-        className="border p-2 w-full mb-2"
-        value={hoursPerDay}
-        onChange={(e) => setHoursPerDay(e.target.value)}
-      />
-      <button
-        onClick={handleGeneratePlan}
-        className="bg-green-500 text-white px-4 py-2 rounded mb-4"
-      >
-        Generate Plan
-      </button>
-
-      {studyPlan?.schedule?.length > 0 && (
-    <div className="border rounded-lg shadow-lg p-4 bg-white">
-        <h3 className="text-lg font-bold mb-2">Study Plan</h3>
-        <ul className="space-y-1">
-            {studyPlan.schedule.map((item, idx) => (
-                <li key={idx} className="p-2 border-b rounded bg-gray-50">{item}</li>
-            ))}
-        </ul>
-    </div>
-)}
-
-
-      <AIChatBot context={{ syllabus: selectedSyllabus, studyPlan }} />
-    </div>
-  );
-};
+}
 
 export default StudyPlanner;

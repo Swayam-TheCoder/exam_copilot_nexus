@@ -7,7 +7,6 @@ const chatRoutes = require("./routes/chatRoutes");
 
 const syllabusRoutes = require("./routes/syllabusRoutes");
 const questionPaperRoutes = require("./routes/questionPaperRoutes");
-const studyPlanRoutes = require("./routes/studyPlanRoutes");
 
 const app = express();
 
@@ -20,7 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/syllabus", syllabusRoutes);
 app.use("/api/question-paper", questionPaperRoutes);
-app.use("/api/study-plan", studyPlanRoutes);
+app.use('/api/study-plan', require('./routes/studyPlannerRoutes'));
+app.use('/api/chatbot', require('./routes/chatbotRoutes'));
 app.use("/api/chat", chatRoutes);
 app.get("/", (req, res) => {
   res.send("Smart Exam AI Backend Running");
