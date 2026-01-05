@@ -43,7 +43,7 @@ function ChatBot() {
       {/* Floating Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 bg-indigo-600 text-white p-4 rounded-full shadow-xl z-50"
+        className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-xl z-50"
       >
         🤖
       </button>
@@ -53,8 +53,8 @@ function ChatBot() {
         <div className="fixed bottom-20 right-6 w-80 bg-black text-white rounded-xl shadow-xl flex flex-col z-50">
 
           {/* Header */}
-          <div className="p-3 bg-indigo-700 rounded-t-xl font-bold text-center">
-            AI Study Assistant
+          <div className="p-3 bg-purple-700 rounded-t-xl font-bold text-center">
+            Study Assistant
           </div>
 
           {/* Messages (Scrollable) */}
@@ -69,7 +69,7 @@ function ChatBot() {
                 <span
                   className={`px-3 py-2 rounded-lg text-sm max-w-[80%] ${
                     c.from === "user"
-                      ? "bg-indigo-600"
+                      ? "bg-purple-600"
                       : "bg-white/20"
                   }`}
                 >
@@ -91,7 +91,7 @@ function ChatBot() {
             />
             <button
               onClick={sendMsg}
-              className="bg-indigo-600 px-3 rounded text-sm"
+              className="bg-purple-600 px-3 rounded text-sm"
             >
               Send
             </button>

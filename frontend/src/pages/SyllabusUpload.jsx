@@ -96,7 +96,7 @@ const SyllabusUpload = () => {
                 <button
                     type="button"
                     onClick={addUnit}
-                    className="bg-blue-500 text-white px-3 py-1 mb-4 rounded"
+                    className="bg-red-700 text-white px-3 py-1 mb-4 rounded"
                 >
                     Add Unit
                 </button>
@@ -105,7 +105,7 @@ const SyllabusUpload = () => {
 
                 <button
                     type="submit"
-                    className="bg-indigo-600 text-white px-4 py-2 rounded"
+                    className="bg-purple-600 text-white px-4 py-2 rounded"
                 >
                     Upload Syllabus
                 </button>

@@ -18,14 +18,14 @@ const Home = () => {
                 <div className="mt-8 flex justify-center gap-4 flex-wrap">
                     <Link
                         to="/syllabus-upload"
-                        className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg shadow hover:opacity-90 transition"
+                        className="bg-linear-to-r from-purple-600 to-purple-600 text-white px-6 py-3 rounded-lg shadow hover:opacity-85 transition"
                     >
                         Upload Syllabus
                     </Link>
 
                     <Link
                         to="/study-planner"
-                        className="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg shadow hover:opacity-90 transition"
+                        className="bg-linear-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg shadow hover:opacity-90 transition"
                     >
                         Create Study Plan
                     </Link>
@@ -77,7 +77,7 @@ const Home = () => {
                 </h2>
                 <Link
                     to="/syllabus-upload"
-                    className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg shadow hover:bg-indigo-700 transition"
+                    className="inline-block bg-purple-600 text-white px-8 py-3 rounded-lg shadow hover:bg-purple-800 transition"
                 >
                     Get Started
                 </Link>

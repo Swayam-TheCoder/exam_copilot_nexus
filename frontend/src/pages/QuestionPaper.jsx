@@ -58,7 +58,7 @@ const QuestionPaper = () => {
             <div className="flex gap-3 mb-4">
                 <button
                     onClick={handleGenerate}
-                    className="bg-indigo-600 text-white px-4 py-2 rounded shadow hover:bg-indigo-700"
+                    className="bg-purple-600 text-white px-4 py-2 rounded shadow hover:bg-purple-800"
                 >
                     {loading ? 'Generating...' : 'Generate Paper'}
                 </button>

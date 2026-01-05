@@ -59,7 +59,7 @@ const StudyPlanner = () => {
 
     return (
         <div className="p-6 max-w-xl mx-auto">
-            <h2 className="text-2xl font-bold mb-4">📅 Study Planner</h2>
+            <h2 className="text-2xl font-bold mb-4">Study Planner</h2>
 
             <input
                 type="date"
@@ -78,7 +78,7 @@ const StudyPlanner = () => {
                 />
                 <button
                     onClick={addTodo}
-                    className="bg-indigo-600 text-white px-4 rounded"
+                    className="bg-purple-600 text-white px-4 rounded"
                 >
                     Add
                 </button>
