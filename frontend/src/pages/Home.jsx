@@ -36,21 +36,21 @@ const Home = () => {
             <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
 
                 <div className="bg-white shadow-lg rounded-lg p-6 text-center">
-                    <h3 className="text-xl font-semibold mb-2">📄 Smart Question Papers</h3>
+                    <h3 className="text-xl font-semibold mb-2">Smart Question Papers</h3>
                     <p className="text-gray-600">
                         Generate balanced exam papers using syllabus analysis and AI-based difficulty control.
                     </p>
                 </div>
 
                 <div className="bg-white shadow-lg rounded-lg p-6 text-center">
-                    <h3 className="text-xl font-semibold mb-2">📚 Personalized Study Plans</h3>
+                    <h3 className="text-xl font-semibold mb-2">Personalized Study Plans</h3>
                     <p className="text-gray-600">
                         Get daily study schedules based on your syllabus, exam date, and available time.
                     </p>
                 </div>
 
                 <div className="bg-white shadow-lg rounded-lg p-6 text-center">
-                    <h3 className="text-xl font-semibold mb-2">🤖 AI Study Assistant</h3>
+                    <h3 className="text-xl font-semibold mb-2">AI Study Assistant</h3>
                     <p className="text-gray-600">
                         Chat with an AI assistant that understands your syllabus and guides your preparation.
                     </p>
@@ -73,7 +73,7 @@ const Home = () => {
             {/* CTA SECTION */}
             <section className="text-center">
                 <h2 className="text-2xl font-bold mb-4">
-                    Start Your Smart Exam Preparation Today 🚀
+                    Start Your Smart Exam Preparation Today
                 </h2>
                 <Link
                     to="/syllabus-upload"
