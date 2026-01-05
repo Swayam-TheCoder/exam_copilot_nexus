@@ -6,18 +6,17 @@ const studyPlanSchema = new mongoose.Schema({
         ref: 'Syllabus',
         required: true
     },
-    examDate: {
-        type: String,
-        required: true
-    },
-    hoursPerDay: {
-        type: Number,
-        required: true
-    },
+    examDate: String,
+    hoursPerDay: Number,
+
     plan: [
         {
             day: String,
-            tasks: [String]
+            tasks: [String],
+            completedTasks: {
+                type: [String],
+                default: []
+            }
         }
     ]
 }, { timestamps: true });

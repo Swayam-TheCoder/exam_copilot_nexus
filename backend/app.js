@@ -11,16 +11,18 @@ const questionPaperRoutes = require("./routes/questionPaperRoutes");
 const app = express();
 
 // Middleware
+app.use(express.json());        // ✅ MUST be here
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
 
 // Routes
 app.use("/api/syllabus", syllabusRoutes);
 app.use("/api/question-paper", questionPaperRoutes);
 app.use('/api/study-plan', require('./routes/studyPlannerRoutes'));
 app.use('/api/chatbot', require('./routes/chatbotRoutes'));
+app.use('/api/study-progress', require('./routes/studyProgressRoutes'));
 app.use("/api/chat", chatRoutes);
 app.get("/", (req, res) => {
   res.send("Smart Exam AI Backend Running");

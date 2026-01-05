@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import SyllabusUpload from './pages/SyllabusUpload';
 import QuestionPaper from './pages/QuestionPaper';
 import StudyPlanner from './pages/StudyPlanner';
+import ChatBot from './components/ChatBot';
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                         <Route path="/question-paper" element={<QuestionPaper />} />
                         <Route path="/study-planner" element={<StudyPlanner />} />
                     </Routes>
+                     <ChatBot />
                 </main>
                 <Footer />
             </div>
