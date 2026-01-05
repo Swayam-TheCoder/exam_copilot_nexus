@@ -12,7 +12,7 @@ const StudyPlanner = () => {
     const loadInitialTodos = async () => {
         try {
             const res = await axios.get(
-                `http://localhost:5001/api/study-todos?date=${today}`
+                `https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app${today}`
             );
             setTodos(res.data);
         } catch {
@@ -30,7 +30,7 @@ const StudyPlanner = () => {
         setDate(selectedDate);
 
         const res = await axios.get(
-            `http://localhost:5001/api/study-todos?date=${selectedDate}`
+            `https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app${selectedDate}`
         );
         setTodos(res.data);
     };
@@ -38,7 +38,7 @@ const StudyPlanner = () => {
     const addTodo = async () => {
         if (!title) return;
 
-        await axios.post('http://localhost:5001/api/study-todos', {
+        await axios.post('https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app', {
             title,
             date
         });
@@ -48,12 +48,12 @@ const StudyPlanner = () => {
     };
 
     const toggleTodo = async (id) => {
-        await axios.patch(`http://localhost:5001/api/study-todos/${id}`);
+        await axios.patch(`https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app${id}`);
         handleDateChange({ target: { value: date } });
     };
 
     const deleteTodo = async (id) => {
-        await axios.delete(`http://localhost:5001/api/study-todos/${id}`);
+        await axios.delete(`https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app${id}`);
         handleDateChange({ target: { value: date } });
     };
 

@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const API_URL = axios.create({
-    baseURL: 'http://localhost:5001/api'
+    baseURL: 'https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app'
 });
 
 export const uploadSyllabus = (data) => API_URL.post('/syllabus', data);
@@ -47,5 +47,5 @@ export const sendAIMessage = async (message, context = {}) => {
 };
 
 export const downloadQuestionPaperPDF = (syllabusId) => {
-    window.open(`http://localhost:5001/api/question-paper/download/${syllabusId}`, '_blank');
+    window.open(`https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app${syllabusId}`, '_blank');
 };

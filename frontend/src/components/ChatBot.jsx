@@ -21,7 +21,7 @@ function ChatBot() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5001/api/chatbot",
+        "https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app",
         { message: msg },
         { headers: { "Content-Type": "application/json" } }
       );
