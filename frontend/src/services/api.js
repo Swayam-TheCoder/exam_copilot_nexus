@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const API_URL = axios.create({
-    baseURL: 'https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app'
+    baseURL: 'http://localhost:5001/api'
 });
 
 export const uploadSyllabus = (data) => API_URL.post('/syllabus', data);
@@ -32,20 +32,32 @@ export const createStudyPlan = async (data) => {
 };
 
 export const generateQuestionPaper = async (syllabusId) => {
-    const res = await axios.post(`${API_URL}/question-paper`, { syllabusId });
+    const res = await API_URL.post('/question-paper', { syllabusId });
     return res.data;
 };
 
 export const generateStudyPlan = async (syllabusId, examDate, hoursPerDay) => {
-    const res = await axios.post(`${API_URL}/study-plan`, { syllabusId, examDate, hoursPerDay });
+    const res = await API_URL.post('/study-plan', {
+        syllabusId,
+        examDate,
+        hoursPerDay
+    });
+
     return res.data;
 };
 
 export const sendAIMessage = async (message, context = {}) => {
-    const res = await axios.post(`${API_URL}/chat`, { message, context });
+    const res = await API_URL.post('/chat', {
+        message,
+        context
+    });
+
     return res.data.reply;
 };
 
 export const downloadQuestionPaperPDF = (syllabusId) => {
-    window.open(`https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app${syllabusId}`, '_blank');
+    window.open(
+        `http://localhost:5001/api/question-paper/${syllabusId}`,
+        '_blank'
+    );
 };

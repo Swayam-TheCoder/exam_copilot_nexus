@@ -21,11 +21,11 @@ function ChatBot() {
 
     try {
       const res = await axios.post(
-        "https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app",
+        "http://localhost:5001/api/chat",
         { message: msg },
         { headers: { "Content-Type": "application/json" } }
       );
-
+      
       setChat((prev) => [
         ...prev,
         { from: "bot", text: res.data.reply }

@@ -1,65 +1,85 @@
-import React, { useState } from 'react';
+// StudyPlanner.jsx
+
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const today = new Date().toISOString().split('T')[0];
+
+const BASE_URL = 'http://localhost:5001/api/study-todos';
 
 const StudyPlanner = () => {
     const [date, setDate] = useState(today);
     const [title, setTitle] = useState('');
     const [todos, setTodos] = useState([]);
 
-    // 🔹 Explicit load function (called once)
-    const loadInitialTodos = async () => {
-        try {
-            const res = await axios.get(
-                `https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app${today}`
-            );
-            setTodos(res.data);
-        } catch {
-            console.error('Initial load failed');
-        }
-    };
+    // Load todos by date
+    const loadTodos = async (selectedDate) => {
+    try {
+        const res = await axios.get(
+            `${BASE_URL}?date=${selectedDate}`
+        );
 
-    // 🔹 Run only once, manually guarded
-    if (todos.length === 0) {
-        loadInitialTodos();
+        setTodos(res.data);
+    } catch (err) {
+        console.error('Failed to load todos', err);
     }
+};
+
+    // Initial load
+    useEffect(() => {
+        loadTodos(today);
+    }, []);
 
     const handleDateChange = async (e) => {
         const selectedDate = e.target.value;
+
         setDate(selectedDate);
 
-        const res = await axios.get(
-            `https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app${selectedDate}`
-        );
-        setTodos(res.data);
+        loadTodos(selectedDate);
     };
 
     const addTodo = async () => {
-        if (!title) return;
+        if (!title.trim()) return;
 
-        await axios.post('https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app', {
-            title,
-            date
-        });
+        try {
+            await axios.post(BASE_URL, {
+                title,
+                date
+            });
 
-        setTitle('');
-        handleDateChange({ target: { value: date } });
+            setTitle('');
+
+            loadTodos(date);
+        } catch (err) {
+            console.error('Failed to add todo', err);
+        }
     };
 
     const toggleTodo = async (id) => {
-        await axios.patch(`https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app${id}`);
-        handleDateChange({ target: { value: date } });
+        try {
+            await axios.patch(`${BASE_URL}/${id}`);
+
+            loadTodos(date);
+        } catch (err) {
+            console.error('Failed to update todo', err);
+        }
     };
 
     const deleteTodo = async (id) => {
-        await axios.delete(`https://exam-copilot-nexus-wnff-3507oroea-hello-e803509d.vercel.app${id}`);
-        handleDateChange({ target: { value: date } });
+        try {
+            await axios.delete(`${BASE_URL}/${id}`);
+
+            loadTodos(date);
+        } catch (err) {
+            console.error('Failed to delete todo', err);
+        }
     };
 
     return (
         <div className="p-6 max-w-xl mx-auto">
-            <h2 className="text-2xl font-bold mb-4">Study Planner</h2>
+            <h2 className="text-2xl font-bold mb-4">
+                Study Planner
+            </h2>
 
             <input
                 type="date"
@@ -76,6 +96,7 @@ const StudyPlanner = () => {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
+
                 <button
                     onClick={addTodo}
                     className="bg-purple-600 text-white px-4 rounded"

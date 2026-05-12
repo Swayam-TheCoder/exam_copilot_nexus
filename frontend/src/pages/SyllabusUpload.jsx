@@ -28,24 +28,49 @@ const SyllabusUpload = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await uploadSyllabus({
-                courseName,
-                units: units.map(unit => ({
-                    unitName: unit.unitName,
-                    topics: unit.topics.filter(t => t.trim() !== '')
-                }))
-            });
+    e.preventDefault();
 
-            alert('Syllabus Uploaded');
-            setCourseName('');
-            setUnits([{ unitName: '', topics: [''] }]);
-        } catch (err) {
-            console.error(err);
-            alert('Upload failed');
-        }
-    };
+    // Clean data
+    const cleanedUnits = units
+        .map(unit => ({
+            unitName: unit.unitName.trim(),
+            topics: unit.topics.filter(
+                topic => topic.trim() !== ''
+            )
+        }))
+        .filter(
+            unit =>
+                unit.unitName !== '' &&
+                unit.topics.length > 0
+        );
+
+    // Validation
+    if (!courseName.trim()) {
+        alert('Course name is required');
+        return;
+    }
+
+    if (cleanedUnits.length === 0) {
+        alert('Add at least one valid unit');
+        return;
+    }
+
+    try {
+        await uploadSyllabus({
+            courseName: courseName.trim(),
+            units: cleanedUnits
+        });
+
+        alert('Syllabus Uploaded');
+
+        setCourseName('');
+        setUnits([{ unitName: '', topics: [''] }]);
+
+    } catch (err) {
+        console.error(err);
+        alert('Upload failed');
+    }
+};
 
     return (
         <div className="p-4 max-w-2xl mx-auto">
