@@ -21,7 +21,7 @@ function ChatBot() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5001/api/chat",
+        "https://exam-copilot-nexus.onrender.com/api/chat",
         { message: msg },
         { headers: { "Content-Type": "application/json" } }
       );

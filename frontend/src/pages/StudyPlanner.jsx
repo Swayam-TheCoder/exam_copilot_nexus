@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const today = new Date().toISOString().split('T')[0];
 
-const BASE_URL = 'http://localhost:5001/api/study-todos';
+const BASE_URL = 'https://exam-copilot-nexus.onrender.com/api/study-todos';
 
 const StudyPlanner = () => {
     const [date, setDate] = useState(today);
