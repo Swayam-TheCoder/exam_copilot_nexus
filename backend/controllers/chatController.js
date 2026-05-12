@@ -1,33 +1,59 @@
-// backend/controllers/chatController.js
 const axios = require('axios');
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEN_URL =
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
-// AI Chat endpoint
 const sendMessageToAI = async (req, res) => {
     try {
-        const { message, context } = req.body; // context can include syllabus, plan, etc.
+        const { message, context } = req.body;
 
-        // Construct Gemini prompt
         const prompt = `
 You are a smart AI study assistant for Indian college students.
-Answer concisely and helpfully. Context: ${JSON.stringify(context)}
-Student asked: ${message}
+
+Context:
+${JSON.stringify(context)}
+
+Student asked:
+${message}
 `;
 
-        const response = await axios.post('https://api.gemini.ai/v1/generate', {
-            prompt
-        }, {
-            headers: { 'Authorization': `Bearer ${GEMINI_API_KEY}` }
+        const response = await axios.post(
+            GEN_URL,
+            {
+                contents: [
+                    {
+                        parts: [
+                            {
+                                text: prompt
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-goog-api-key': process.env.GEMINI_API_KEY
+                }
+            }
+        );
+
+        const reply =
+            response.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+            'Sorry, I could not answer that.';
+
+        res.json({
+            success: true,
+            reply
         });
 
-        const reply = response.data?.text || 'Sorry, I could not generate a response.';
-
-        res.json({ success: true, reply });
-
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, reply: 'Server Error' });
+        console.error('CHAT ERROR:', error.response?.data || error.message);
+
+        res.status(500).json({
+            success: false,
+            reply: 'Server Error'
+        });
     }
 };
 
