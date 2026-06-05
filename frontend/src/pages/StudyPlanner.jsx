@@ -1,142 +1,244 @@
-// StudyPlanner.jsx
-
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-
-const today = new Date().toISOString().split('T')[0];
-
-const BASE_URL = 'https://exam-copilot-nexus.onrender.com/api/study-todos';
+import React, { useEffect, useState } from "react";
+import { getSyllabi, generateStudyPlan } from "../services/api";
+import Loader from "../components/Loader";
 
 const StudyPlanner = () => {
-    const [date, setDate] = useState(today);
-    const [title, setTitle] = useState('');
-    const [todos, setTodos] = useState([]);
+  const [syllabi, setSyllabi] = useState([]);
+  const [selectedSyllabus, setSelectedSyllabus] = useState("");
+  const [examDate, setExamDate] = useState("");
+  const [hoursPerDay, setHoursPerDay] = useState(3);
 
-    // Load todos by date
-    const loadTodos = async (selectedDate) => {
-    try {
-        const res = await axios.get(
-            `${BASE_URL}?date=${selectedDate}`
-        );
+  const [studyPlan, setStudyPlan] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-        setTodos(res.data);
-    } catch (err) {
-        console.error('Failed to load todos', err);
+  useEffect(() => {
+    const fetchSyllabi = async () => {
+      try {
+        const data = await getSyllabi();
+        setSyllabi(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchSyllabi();
+  }, []);
+
+  const handleGeneratePlan = async () => {
+    if (!selectedSyllabus) {
+      alert("Please select a syllabus");
+      return;
     }
-};
 
-    // Initial load
-    useEffect(() => {
-        loadTodos(today);
-    }, []);
+    if (!examDate) {
+      alert("Please select exam date");
+      return;
+    }
 
-    const handleDateChange = async (e) => {
-        const selectedDate = e.target.value;
+    setLoading(true);
 
-        setDate(selectedDate);
+    try {
+      const res = await generateStudyPlan(
+        selectedSyllabus,
+        examDate,
+        hoursPerDay
+      );
 
-        loadTodos(selectedDate);
-    };
+      if (res.success) {
+        setStudyPlan(res.studyPlan);
+      } else {
+        alert("Failed to generate study plan");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error generating study plan");
+    }
 
-    const addTodo = async () => {
-        if (!title.trim()) return;
+    setLoading(false);
+  };
 
-        try {
-            await axios.post(BASE_URL, {
-                title,
-                date
-            });
+  return (
+    <div
+      className="
+      max-w-5xl
+      mx-auto
+      bg-white/5
+      backdrop-blur-xl
+      border
+      border-white/10
+      rounded-3xl
+      p-8
+      "
+    >
+      <h2
+        className="
+        text-3xl
+        font-bold
+        text-white
+        mb-8
+        "
+      >
+        AI Study Planner
+      </h2>
 
-            setTitle('');
+      <div className="space-y-5">
+        <select
+          value={selectedSyllabus}
+          onChange={(e) => setSelectedSyllabus(e.target.value)}
+          className="
+w-full
+bg-slate-900/80
+border
+border-cyan-500/20
+rounded-2xl
+p-4
+text-white
+outline-none
+focus:border-cyan-500
+focus:ring-2
+focus:ring-cyan-500/20
+transition-all
+duration-300
+"
+        >
+          <option value="">Select Syllabus</option>
 
-            loadTodos(date);
-        } catch (err) {
-            console.error('Failed to add todo', err);
-        }
-    };
+          {syllabi.map((s) => (
+            <option key={s._id} value={s._id}>
+              {s.courseName}
+            </option>
+          ))}
+        </select>
 
-    const toggleTodo = async (id) => {
-        try {
-            await axios.patch(`${BASE_URL}/${id}`);
+        <input
+          type="date"
+          value={examDate}
+          onChange={(e) => setExamDate(e.target.value)}
+          className="
+w-full
+bg-slate-900/80
+border
+border-purple-500/20
+rounded-2xl
+p-4
+text-white
+outline-none
+focus:border-purple-500
+focus:ring-2
+focus:ring-purple-500/20
+transition-all
+duration-300
+"
+        />
 
-            loadTodos(date);
-        } catch (err) {
-            console.error('Failed to update todo', err);
-        }
-    };
+        <input
+          type="number"
+          min="1"
+          max="12"
+          value={hoursPerDay}
+          onChange={(e) => setHoursPerDay(e.target.value)}
+          placeholder="Hours per day"
+          className="
+w-full
+bg-slate-900/80
+border
+border-purple-500/20
+rounded-2xl
+p-4
+text-white
+outline-none
+focus:border-purple-500
+focus:ring-2
+focus:ring-purple-500/20
+transition-all
+duration-300
+"
+        />
 
-    const deleteTodo = async (id) => {
-        try {
-            await axios.delete(`${BASE_URL}/${id}`);
+        <button
+          onClick={handleGeneratePlan}
+          disabled={loading}
+          className="
+          px-6
+          py-3
+          rounded-xl
+          bg-gradient-to-r
+          from-purple-500
+          to-pink-500
+          text-white
+          font-semibold
+          hover:scale-105
+          transition
+          "
+        >
+          {loading ? "Generating..." : "Generate Study Plan"}
+        </button>
+      </div>
 
-            loadTodos(date);
-        } catch (err) {
-            console.error('Failed to delete todo', err);
-        }
-    };
+      {studyPlan?.plan?.length > 0 && (
+        <div
+          className="
+          mt-10
+          bg-black/20
+          border
+          border-white/10
+          rounded-2xl
+          p-6
+          "
+        >
+          <h3
+            className="
+            text-2xl
+            font-bold
+            text-white
+            mb-6
+            "
+          >
+            Generated Study Plan
+          </h3>
 
-    return (
-        <div className="p-6 max-w-xl mx-auto">
-            <h2 className="text-2xl font-bold mb-4">
-                Study Planner
-            </h2>
-
-            <input
-                type="date"
-                className="border p-2 w-full mb-3"
-                value={date}
-                onChange={handleDateChange}
-            />
-
-            <div className="flex gap-2 mb-4">
-                <input
-                    type="text"
-                    placeholder="Add study task..."
-                    className="border p-2 flex-1"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-
-                <button
-                    onClick={addTodo}
-                    className="bg-purple-600 text-white px-4 rounded"
+          <div className="space-y-5">
+            {studyPlan.plan.map((dayPlan, index) => (
+              <div
+                key={index}
+                className="
+                bg-white/5
+                border
+                border-white/10
+                rounded-xl
+                p-5
+                "
+              >
+                <h4
+                  className="
+                  text-lg
+                  font-semibold
+                  text-cyan-400
+                  mb-3
+                  "
                 >
-                    Add
-                </button>
-            </div>
+                  {dayPlan.day}
+                </h4>
 
-            {todos.length === 0 && (
-                <p className="text-gray-500 text-center">
-                    No tasks for this day
-                </p>
-            )}
-
-            {todos.map((todo) => (
-                <div
-                    key={todo._id}
-                    className="flex justify-between items-center border p-2 mb-2 rounded"
-                >
-                    <span
-                        onClick={() => toggleTodo(todo._id)}
-                        className={`cursor-pointer ${
-                            todo.completed
-                                ? 'line-through text-gray-400'
-                                : ''
-                        }`}
+                <ul className="list-disc pl-5 space-y-2">
+                  {dayPlan.tasks.map((task, i) => (
+                    <li
+                      key={i}
+                      className="
+                      text-slate-300
+                      "
                     >
-                        {todo.title}
-                    </span>
-
-                    <button
-                        onClick={() => deleteTodo(todo._id)}
-                        className="text-red-500 font-bold"
-                    >
-                        ✕
-                    </button>
-                </div>
+                      {task}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default StudyPlanner;

@@ -6,11 +6,46 @@ const GEN_URL =
 const generateStudyPlan = async (syllabus, examDate, hoursPerDay) => {
     try {
         const prompt = `
-Create a simple day-wise study plan for:
+You are an expert study planner.
+
+Course:
 ${syllabus.courseName}
 
 Units:
-${syllabus.units.map(u => `${u.unitName}: ${u.topics.join(', ')}`).join('\n')}
+${syllabus.units
+  .map((u) => `${u.unitName}: ${u.topics.join(", ")}`)
+  .join("\n")}
+
+Exam Date:
+${examDate}
+
+Daily Study Hours:
+${hoursPerDay}
+
+Create a detailed study plan.
+
+Rules:
+
+1. Cover every unit.
+2. Divide workload equally.
+3. Add revision sessions.
+4. Add mock test days.
+5. Add PYQ practice.
+6. Add final revision week.
+
+Return ONLY JSON:
+
+{
+  "plan": [
+    {
+      "day":"Day 1",
+      "tasks":[
+        "Topic 1",
+        "Topic 2"
+      ]
+    }
+  ]
+}
 `;
 
         const response = await axios.post(

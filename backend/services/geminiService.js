@@ -19,21 +19,46 @@ const generateQuestionPaper = async (syllabus) => {
         .join('\n');
 
     const prompt = `
-You are an AI exam generator.
+You are an experienced Indian university paper setter.
 
-Generate a balanced college exam paper for the following syllabus:
-Course: ${syllabus.courseName}
-Units and Topics:
+Course:
+${syllabus.courseName}
+
+Syllabus:
 ${syllabusText}
 
-Instructions:
-- For each topic, generate at least 1-2 questions.
-- Make questions varied: easy, medium, hard.
-- Output JSON ONLY in this format:
+Generate a COMPLETE university examination paper.
+
+Requirements:
+
+SECTION A
+- 10 Easy questions
+- 2 marks each
+
+SECTION B
+- 10 Medium questions
+- 5 marks each
+
+SECTION C
+- 5 Long questions
+- 10 marks each
+
+Rules:
+- Cover ALL units.
+- Cover ALL important topics.
+- Mix theory and practical questions.
+- Include numerical/problem-solving questions wherever applicable.
+- No duplicate questions.
+
+Return ONLY JSON:
+
 {
-  "questions": ["Question 1", "Question 2", ...]
+  "questions": [
+    "Q1 ...",
+    "Q2 ...",
+    ...
+  ]
 }
-- Remove all Markdown, backticks, LaTeX symbols. Keep plain text only.
 `;
 
     const response = await axios.post(
