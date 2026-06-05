@@ -123,6 +123,14 @@ ${message}
   } catch (error) {
     console.error("CHAT ERROR:", error.response?.data || error.message);
 
+    if (error.response?.data?.error?.code === 429) {
+      return res.status(429).json({
+        success: false,
+        reply:
+          "AI service is currently busy. Please try again in a few seconds.",
+      });
+    }
+
     res.status(500).json({
       success: false,
       reply: "Server Error",

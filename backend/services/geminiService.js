@@ -68,7 +68,8 @@ Return ONLY JSON:
             headers: {
                 'Content-Type': 'application/json',
                 'x-goog-api-key': process.env.GEMINI_API_KEY
-            }
+            },
+            timeout: 10000 // 10 seconds timeout for long generation
         }
     );
 
