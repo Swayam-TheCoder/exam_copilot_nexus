@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API_URL = axios.create({
-  baseURL: "https://exam-copilot-nexus.onrender.com/api",
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 export const uploadSyllabus = (data) => API_URL.post("/syllabus", data);
@@ -57,7 +57,7 @@ export const sendAIMessage = async (message, context = {}) => {
 
 export const downloadQuestionPaperPDF = (syllabusId) => {
   window.open(
-  `https://exam-copilot-nexus.onrender.com/api/question-paper/download/${syllabusId}`,
-  "_blank"
-);
+    `${import.meta.env.VITE_API_URL}/question-paper/${syllabusId}`,
+    "_blank",
+  );
 };

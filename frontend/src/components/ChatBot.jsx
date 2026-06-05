@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { Bot, Send, X } from "lucide-react";
+import { sendAIMessage } from "../services/api";
 
 function ChatBot() {
   const [open, setOpen] = useState(false);
@@ -33,12 +34,7 @@ function ChatBot() {
     setLoading(true);
 
     try {
-      const res = await axios.post(
-        "https://exam-copilot-nexus.onrender.com/api/chat",
-        {
-          message: currentMsg,
-        }
-      );
+      const res = await sendAIMessage(msg);
 
       setChat((prev) => [
         ...prev,
@@ -48,14 +44,19 @@ function ChatBot() {
         },
       ]);
     } catch (err) {
-      setChat((prev) => [
-        ...prev,
-        {
-          from: "bot",
-          text: "Sorry, something went wrong.",err,
-        },
-      ]);
+  console.error("Chat Error:", err);
+
+  setChat((prev) => [
+    ...prev,
+    {
+      from: "bot",
+      text:
+        err.response?.data?.reply ||
+        err.message ||
+        "Something went wrong."
     }
+  ]);
+}
 
     setLoading(false);
   };

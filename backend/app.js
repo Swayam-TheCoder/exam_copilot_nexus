@@ -21,7 +21,6 @@ app.use(bodyParser.json());
 app.use("/api/syllabus", syllabusRoutes);
 app.use("/api/question-paper", questionPaperRoutes);
 app.use('/api/study-plan', require('./routes/studyPlannerRoutes'));
-// app.use('/api/chatbot', require('./routes/chatbotRoutes'));
 app.use('/api/study-progress', require('./routes/studyProgressRoutes'));
 app.use("/api/chat", chatRoutes);
 app.get("/", (req, res) => {
