@@ -34,27 +34,32 @@ function ChatBot() {
     setLoading(true);
 
     try {
-      const res = await sendAIMessage(msg);
-
-      setChat((prev) => [
-        ...prev,
-        {
-          from: "bot",
-          text: res.data.reply,
-        },
-      ]);
-    } catch (err) {
-  console.error("Chat Error:", err);
+  const res = await axios.post(
+    `${import.meta.env.VITE_API_URL}/chat`,
+    { message: msg },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   setChat((prev) => [
     ...prev,
     {
       from: "bot",
+      text: res?.data?.reply || "No response received",
+    },
+  ]);
+} catch (err) {
+  setChat((prev) => [
+    ...prev,
+    {
+      from: "bot",
       text:
-        err.response?.data?.reply ||
-        err.message ||
-        "Something went wrong."
-    }
+        err?.response?.data?.reply ||
+        "AI service is temporarily unavailable. Please try again later.",
+    },
   ]);
 }
 

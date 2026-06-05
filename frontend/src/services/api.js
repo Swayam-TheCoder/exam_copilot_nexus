@@ -47,12 +47,19 @@ export const generateStudyPlan = async (syllabusId, examDate, hoursPerDay) => {
 };
 
 export const sendAIMessage = async (message, context = {}) => {
-  const res = await API_URL.post("/chat", {
-    message,
-    context,
-  });
+  try {
+    const res = await API_URL.post("/chat", {
+      message,
+      context,
+    });
 
-  return res.data.reply;
+    return res?.data?.reply || "No response";
+  } catch (err) {
+    return (
+      err?.response?.data?.reply ||
+      "AI service is currently unavailable."
+    );
+  }
 };
 
 export const downloadQuestionPaperPDF = (syllabusId) => {
